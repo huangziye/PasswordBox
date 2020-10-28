@@ -1,0 +1,3 @@
+include ':password'
+include ':app'
+rootProject.name = "PasswordBox"
