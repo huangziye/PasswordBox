@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--alipay密码框-->
+    <declare-styleable name="inputBox">
+        <attr name="passwordCount" format="integer" />
+        <attr name="stokeColor" format="color" />
+        <attr name="symbolColor" format="color" />
+        <attr name="symbolRadius" format="dimension" />
+        <attr name="inputBoxStroke" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="materialStatusProgressAttr">
+        <attr name="arcColor" format="reference|color" />
+        <attr name="progressBarBorderWidth" format="dimension" />
+    </declare-styleable>
+
+    <style name="exist_menu_animstyle">
+        <item name="android:windowEnterAnimation">@anim/anim_bottom_in</item>
+        <item name="android:windowExitAnimation">@anim/anim_bottom_out</item>
+    </style>
+</resources>

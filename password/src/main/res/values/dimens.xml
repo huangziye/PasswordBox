@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="_22dp">22dp</dimen>
+    <dimen name="_12dp">12dp</dimen>
+    <dimen name="material_status_progress_border">3dp</dimen>
+</resources>
