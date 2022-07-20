@@ -188,17 +188,22 @@ class PasswordKeypad : DialogFragment(), View.OnClickListener, OnPasswordInputLi
         passwordView!!.setPassword(mPasswordBuffer)
         if (mPasswordBuffer.length == passwordView!!.passwordCount) {
 //            Handler().postDelayed({ startLoading(mPasswordBuffer) }, 100)
-            // 保存输入的密码
-            mPasswordList.add(mPasswordBuffer.toString())
-            if (++mCurrentTimes == mTimes) {
-                Handler().postDelayed({ startLoading(mPasswordList) }, 100)
-                mTimes = 1
-                mCurrentTimes = 0
-            } else {
-                if (mTitleList.isNotEmpty() && mTitleList.size == mTimes) {
-                    tvTitle?.text = mTitleList[mCurrentTimes]
+            mCurrentTimes++
+            if (mCurrentTimes <= mTimes) {
+                if (mPasswordList.size < mTimes) {
+                    // 保存输入的密码
+                    mPasswordList.add(mPasswordBuffer.toString())
                 }
-                Handler().postDelayed({ passwordView!!.clearPassword() }, 100)
+                if (mCurrentTimes == mTimes) {
+                    Handler().postDelayed({ startLoading(mPasswordList) }, 100)
+                    mTimes = 1
+                    mCurrentTimes = 0
+                } else {
+                    if (mTitleList.isNotEmpty() && mTitleList.size == mTimes) {
+                        tvTitle?.text = mTitleList[mCurrentTimes]
+                    }
+                    Handler().postDelayed({ passwordView!!.clearPassword() }, 100)
+                }
             }
         }
     }
