@@ -15,6 +15,6 @@ allprojects {
 
 ```java
 dependencies {
-  implementation 'com.github.huangziye:PasswordBox:Tag'
+  implementation 'com.github.huangziye:PasswordBox:{lastestVersion}'
 }
 ```

@@ -97,10 +97,7 @@ class PasswordKeyboard : GridLayout, View.OnClickListener, View.OnTouchListener 
     }
 
 
-    constructor(context: Context, attrs: AttributeSet? = null) : super(
-        context,
-        attrs
-    ) {
+    constructor(context: Context, attrs: AttributeSet? = null) : super(context, attrs) {
         initView()
     }
 
@@ -258,7 +255,7 @@ class PasswordKeyboard : GridLayout, View.OnClickListener, View.OnTouchListener 
     /**
      * 随机生成键盘key数字
      */
-    fun randomKeys(num: Int): List<String> {
+    private fun randomKeys(num: Int): List<String> {
         val keys = IntArray(num)
         for (i in 0 until num) {
             keys[i] = i

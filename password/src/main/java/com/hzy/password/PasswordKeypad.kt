@@ -24,14 +24,32 @@ import com.hzy.password.PasswordKeyboard.OnPasswordInputListener
 class PasswordKeypad : DialogFragment(), View.OnClickListener, OnPasswordInputListener,
     OnPasswordCorrectlyListener {
     private var errorMsgTv: TextView? = null
+    private var tvTitle: TextView? = null
     private var mCallback: Callback? = null
     private var passwordContainer: RelativeLayout? = null
     private var progressBar: MDProgressBar? = null
     private var passwordView: PasswordView? = null
     private var passwordCount = 0
     private var passwordState = true
-    var numberKeyBoard: PasswordKeyboard? = null
+    private var numberKeyBoard: PasswordKeyboard? = null
     private val mPasswordBuffer = StringBuffer()
+
+    /**
+     * 需要输入的密码的次数，默认1次
+     */
+    private var mTimes = 1
+
+    /**
+     * 当前输入的次数
+     */
+    private var mCurrentTimes = 0
+
+    /**
+     * 标题集合
+     */
+    private var mTitleList = listOf<CharSequence>()
+    private val mPasswordList = mutableListOf<CharSequence>()
+
     override fun onAttach(context: Activity) {
         super.onAttach(context)
         if (context is Callback) {
@@ -69,6 +87,10 @@ class PasswordKeypad : DialogFragment(), View.OnClickListener, OnPasswordInputLi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         errorMsgTv = view.findViewById(R.id.error_msg)
+        tvTitle = view.findViewById(R.id.tv_title)
+        if (mTitleList.isNotEmpty() && mTitleList.size == mTimes) {
+            tvTitle?.text = mTitleList[0]
+        }
         val forgetPasswordTv = view.findViewById<TextView>(R.id.forget_password)
         val cancelTv = view.findViewById<ImageView>(R.id.cancel_dialog)
         passwordContainer = view.findViewById(R.id.password_content)
@@ -92,6 +114,14 @@ class PasswordKeypad : DialogFragment(), View.OnClickListener, OnPasswordInputLi
         this.passwordCount = passwordCount
     }
 
+    fun setInputPasswordTimes(times: Int) {
+        this.mTimes = times
+    }
+
+    fun setTitleList(titleList: List<CharSequence>) {
+        this.mTitleList = titleList
+    }
+
     override fun onClick(v: View) {
         if (R.id.cancel_dialog == v.id) {
             if (mCallback != null) {
@@ -113,7 +143,7 @@ class PasswordKeypad : DialogFragment(), View.OnClickListener, OnPasswordInputLi
         setPasswordState(correct, "")
     }
 
-    fun setPasswordState(correct: Boolean, msg: String?) {
+    private fun setPasswordState(correct: Boolean, msg: String?) {
         passwordState = correct
         if (correct) {
             progressBar!!.setSuccessfullyStatus()
@@ -132,7 +162,7 @@ class PasswordKeypad : DialogFragment(), View.OnClickListener, OnPasswordInputLi
         }
     }
 
-    private fun startLoading(password: CharSequence) {
+    private fun startLoading(password: MutableList<CharSequence>) {
         passwordContainer!!.visibility = View.INVISIBLE
         progressBar!!.visibility = View.VISIBLE
         if (mCallback != null) {
@@ -157,7 +187,19 @@ class PasswordKeypad : DialogFragment(), View.OnClickListener, OnPasswordInputLi
         }
         passwordView!!.setPassword(mPasswordBuffer)
         if (mPasswordBuffer.length == passwordView!!.passwordCount) {
-            Handler().postDelayed({ startLoading(mPasswordBuffer) }, 100)
+//            Handler().postDelayed({ startLoading(mPasswordBuffer) }, 100)
+            // 保存输入的密码
+            mPasswordList.add(mPasswordBuffer.toString())
+            if (++mCurrentTimes == mTimes) {
+                Handler().postDelayed({ startLoading(mPasswordList) }, 100)
+                mTimes = 1
+                mCurrentTimes = 0
+            } else {
+                if (mTitleList.isNotEmpty() && mTitleList.size == mTimes) {
+                    tvTitle?.text = mTitleList[mCurrentTimes]
+                }
+                Handler().postDelayed({ passwordView!!.clearPassword() }, 100)
+            }
         }
     }
 
@@ -166,5 +208,6 @@ class PasswordKeypad : DialogFragment(), View.OnClickListener, OnPasswordInputLi
         if (mPasswordBuffer.length > 0) {
             mPasswordBuffer.delete(0, mPasswordBuffer.length)
         }
+        mPasswordList.clear()
     }
 }

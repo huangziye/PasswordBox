@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.hzy.password.Callback
 import com.hzy.password.PasswordKeypad
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,13 +27,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val dialog = PasswordKeypad()
         dialog.setPasswordCount(6)
         dialog.isCancelable = false
+        dialog.setInputPasswordTimes(2)
+        dialog.setTitleList(listOf("请输入旧密码", "请输入新密码"))
         dialog.setCallback(object : Callback {
             override fun onForgetPassword() {
                 dialog.setPasswordState(true)
                 dialog.dismiss()
             }
 
-            override fun onInputCompleted(password: CharSequence?) {
+            override fun onInputCompleted(password: MutableList<CharSequence>) {
                 Toast.makeText(this@MainActivity, password.toString(), Toast.LENGTH_SHORT).show()
                 Handler().postDelayed({
                     dialog.setPasswordState(true)

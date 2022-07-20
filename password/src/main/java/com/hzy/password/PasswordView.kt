@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 
 /**
@@ -100,6 +101,7 @@ class PasswordView : View {
         if (mText != null) {
             mText!!.delete(0, mText!!.length)
         }
+        postInvalidate()
     }
 
     val password: CharSequence?
